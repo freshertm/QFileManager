@@ -26,6 +26,10 @@ protected:
 
     bool eventFilter(QObject *obj, QEvent *event);
 
+private slots:
+    void on_listView_clicked(const QModelIndex &index);
+    void onCustomContextMenu(const QPoint &point);
+
 private:
     Ui::DiskSelector *ui;
     QFileSystemModel *model;

@@ -40,3 +40,5 @@ FORMS += \
         mainwindow.ui \
     diskselector.ui \
     dirviewer.ui
+
+LIBS += User32.lib
