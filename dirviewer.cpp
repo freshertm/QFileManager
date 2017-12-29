@@ -22,6 +22,7 @@ DirViewer::DirViewer(QDir dir, QWidget *parent) :
     selector->installEventFilter(this);
 
     connect(selector, &DiskSelector::driveSelected, this, &DirViewer::changeDir);
+    connect(model, &QFileSystemModel::directoryLoaded, this, &DirViewer::directoryLoaded);
 }
 
 DirViewer::~DirViewer()
@@ -100,5 +101,11 @@ void DirViewer::openDiskList()
 {
     QSize size = selector->size();
     selector->setGeometry(0,0,size.width(), size.height());
-    selector->setVisible(true);   
+    selector->setVisible(true);
+}
+
+void DirViewer::directoryLoaded(const QString &path)
+{
+    ui->listView->setCurrentIndex(model->index(0));
+
 }

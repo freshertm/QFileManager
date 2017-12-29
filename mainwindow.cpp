@@ -7,7 +7,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    set(nullptr)
 {
     ui->setupUi(this);
 
@@ -24,22 +25,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::keyPressEvent(QKeyEvent * event)
+void MainWindow::setSettings(Settings *settings)
 {
-    if (event->key() == Qt::Key_F1 &&
-        event->modifiers() == Qt::AltModifier){
-        QCoreApplication::postEvent(left, new QEvent(OpenDiskList));
-        event->accept();
-        return;
-    }
+    set = settings;
+    connect(set->leftPanelChangeDrive, &QShortcut::activated,
+            this, &MainWindow::leftPanelChangeDrive);
+    connect(set->rightPanelChangeDrive, &QShortcut::activated,
+            this, &MainWindow::leftPanelChangeDrive);
 
-    if (event->key() == Qt::Key_F2 &&
-        event->modifiers() == Qt::AltModifier){
-        QCoreApplication::postEvent(right, new QEvent(OpenDiskList));
-        event->accept();
-        return;
-    }
-    event->ignore();
 }
 
 void MainWindow::setLeft(AbstractPanel *panel)
@@ -58,6 +51,16 @@ void MainWindow::setRight(AbstractPanel *panel)
     }
     ui->layout->addWidget(panel);
     right = panel;
+}
+
+void MainWindow::rightPanelChangeDrive()
+{
+    QCoreApplication::postEvent(right, new QEvent(OpenDiskList));
+}
+
+void MainWindow::leftPanelChangeDrive()
+{
+    QCoreApplication::postEvent(left, new QEvent(OpenDiskList));
 }
 
 

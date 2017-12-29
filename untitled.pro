@@ -27,14 +27,16 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     dirviewer.cpp \
-    diskselector.cpp
+    diskselector.cpp \
+    settings.cpp
 
 HEADERS += \
         mainwindow.h \
     abstractpanel.h \
     dirviewer.h \
     diskselector.h \
-    customevent.h
+    customevent.h \
+    settings.h
 
 FORMS += \
         mainwindow.ui \

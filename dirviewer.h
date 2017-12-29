@@ -31,6 +31,7 @@ public slots:
 private slots:
     void on_listView_doubleClicked(const QModelIndex &index);
     void openDiskList();
+    void directoryLoaded(const QString &path);
 
 private:
     QDir dir;
