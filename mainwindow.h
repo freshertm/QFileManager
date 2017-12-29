@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QFileSystemModel>
+#include "abstractpanel.h"
 
 namespace Ui {
 class MainWindow;
@@ -16,15 +17,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
-    void on_leftPanel_doubleClicked(const QModelIndex &index);
-
+private:
+    void setLeft(AbstractPanel * panel);
+    void setRight(AbstractPanel * panel);
 private:
     Ui::MainWindow *ui;
 
-   QFileSystemModel *left;
-   QFileSystemModel *right;
-
+    AbstractPanel *left;
+    AbstractPanel *right;
 };
 
 #endif // MAINWINDOW_H

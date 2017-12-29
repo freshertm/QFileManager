@@ -1,16 +1,20 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "fileviewer.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    left = new QFileSystemModel(this);
-    left->setRootPath("C:/Windows");
-    left->setFilter(QDir::NoDot | QDir::AllEntries);
-    ui->leftPanel->setModel(left);
+    QDir dir("C:/");
+
+    FileViewer *l = new FileViewer(dir, this);
+    FileViewer *r = new FileViewer(dir, this);
+    setLeft(l);
+    setRight(r);
 }
 
 MainWindow::~MainWindow()
@@ -18,9 +22,22 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_leftPanel_doubleClicked(const QModelIndex &index)
+void MainWindow::setLeft(AbstractPanel *panel)
 {
-    QString path = left->filePath(index);
-    left->setRootPath(path);
-    ui->leftPanel->setRootIndex(left->index(path));
+    if (left) {
+        ui->layout->removeWidget(left);
+    }
+    ui->layout->addWidget(panel);
+    left = panel;
 }
+
+void MainWindow::setRight(AbstractPanel *panel)
+{
+    if (right) {
+        ui->layout->removeWidget(right);
+    }
+    ui->layout->addWidget(panel);
+    right = panel;
+}
+
+
