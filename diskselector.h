@@ -9,7 +9,7 @@ namespace Ui {
 class DiskSelector;
 }
 
-class DiskSelector : public QListView
+class DiskSelector : public QWidget
 {
     Q_OBJECT
 
@@ -17,9 +17,14 @@ public:
     explicit DiskSelector(QWidget *parent = 0);
     ~DiskSelector();
 
-protected:
-    virtual void focusOutEvent(QFocusEvent *);
+signals:
+    void driveSelected(QDir drive);
+
+protected:   
     virtual void showEvent(QShowEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event);
+
+    bool eventFilter(QObject *obj, QEvent *event);
 
 private:
     Ui::DiskSelector *ui;

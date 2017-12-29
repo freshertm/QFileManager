@@ -23,6 +23,8 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event);
     virtual bool event(QEvent * event);
 
+    bool eventFilter(QObject *obj, QEvent *event);
+
 public slots:
     virtual void changeDir(QDir dir);
 

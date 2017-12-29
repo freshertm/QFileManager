@@ -29,12 +29,17 @@ void MainWindow::keyPressEvent(QKeyEvent * event)
     if (event->key() == Qt::Key_F1 &&
         event->modifiers() == Qt::AltModifier){
         QCoreApplication::postEvent(left, new QEvent(OpenDiskList));
+        event->accept();
+        return;
     }
 
     if (event->key() == Qt::Key_F2 &&
         event->modifiers() == Qt::AltModifier){
         QCoreApplication::postEvent(right, new QEvent(OpenDiskList));
+        event->accept();
+        return;
     }
+    event->ignore();
 }
 
 void MainWindow::setLeft(AbstractPanel *panel)

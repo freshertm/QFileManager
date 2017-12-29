@@ -18,6 +18,10 @@ DirViewer::DirViewer(QDir dir, QWidget *parent) :
 
     selector = new DiskSelector(this);
     selector->setVisible(false);
+
+    selector->installEventFilter(this);
+
+    connect(selector, &DiskSelector::driveSelected, this, &DirViewer::changeDir);
 }
 
 DirViewer::~DirViewer()
@@ -36,6 +40,8 @@ void DirViewer::keyPressEvent(QKeyEvent *event)
         event->key() == Qt::Key_Return)
     {
         on_listView_doubleClicked(ui->listView->currentIndex());
+        event->accept();
+        return;
     }
 
     if (event->key() == Qt::Key_Backspace)
@@ -43,7 +49,10 @@ void DirViewer::keyPressEvent(QKeyEvent *event)
         QDir c = dir;
         c.cdUp();
         on_listView_doubleClicked(model->index(c.absolutePath()));
+        event->accept();
+        return;
     }
+    event->ignore();
 }
 
 bool DirViewer::event(QEvent *event)
@@ -53,7 +62,17 @@ bool DirViewer::event(QEvent *event)
         event->accept();
         return true;
     }
-    return false;
+    return QWidget::event(event);
+}
+
+bool DirViewer::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == selector &&
+            event->type() == QEvent::Hide) {
+        ui->listView->setFocus();
+        return true;
+    }
+    return QObject::eventFilter(obj, event);
 }
 
 void DirViewer::changeDir(QDir dir)
@@ -81,6 +100,5 @@ void DirViewer::openDiskList()
 {
     QSize size = selector->size();
     selector->setGeometry(0,0,size.width(), size.height());
-    selector->setVisible(true);
-    selector->setFocus();
+    selector->setVisible(true);   
 }
