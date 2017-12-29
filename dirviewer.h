@@ -7,7 +7,7 @@
 #include "diskselector.h"
 
 namespace Ui {
-class FileViewer;
+class DirViewer;
 }
 
 class DirViewer : public AbstractPanel
@@ -34,7 +34,7 @@ private slots:
 
 private:
     QDir dir;
-    Ui::FileViewer *ui;
+    Ui::DirViewer *ui;
     QFileSystemModel * model;
     DiskSelector *selector;
 };

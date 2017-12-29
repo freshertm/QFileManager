@@ -1,11 +1,11 @@
 #include "dirviewer.h"
-#include "ui_fileviewer.h"
+#include "ui_dirviewer.h"
 #include <QKeyEvent>
 #include "customevent.h"
 
 DirViewer::DirViewer(QDir dir, QWidget *parent) :
     AbstractPanel(dir, parent),
-    ui(new Ui::FileViewer),
+    ui(new Ui::DirViewer),
     dir(dir)
 {
     ui->setupUi(this);
