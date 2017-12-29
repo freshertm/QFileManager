@@ -26,13 +26,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    fileviewer.cpp
+    dirviewer.cpp \
+    diskselector.cpp
 
 HEADERS += \
         mainwindow.h \
-    fileviewer.h \
-    abstractpanel.h
+    abstractpanel.h \
+    dirviewer.h \
+    diskselector.h \
+    customevent.h
 
 FORMS += \
         mainwindow.ui \
-    fileviewer.ui
+    diskselector.ui \
+    dirviewer.ui

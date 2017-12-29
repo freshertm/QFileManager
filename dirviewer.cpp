@@ -1,8 +1,9 @@
-#include "fileviewer.h"
+#include "dirviewer.h"
 #include "ui_fileviewer.h"
 #include <QKeyEvent>
+#include "customevent.h"
 
-FileViewer::FileViewer(QDir dir, QWidget *parent) :
+DirViewer::DirViewer(QDir dir, QWidget *parent) :
     AbstractPanel(dir, parent),
     ui(new Ui::FileViewer),
     dir(dir)
@@ -14,19 +15,22 @@ FileViewer::FileViewer(QDir dir, QWidget *parent) :
     model->setFilter(QDir::NoDot | QDir::AllEntries);
     ui->listView->setModel(model);
     changeDir(dir);
+
+    selector = new DiskSelector(this);
+    selector->setVisible(false);
 }
 
-FileViewer::~FileViewer()
+DirViewer::~DirViewer()
 {
     delete ui;
 }
 
-QDir FileViewer::currentDir()
+QDir DirViewer::currentDir()
 {
     return dir;
 }
 
-void FileViewer::keyPressEvent(QKeyEvent *event)
+void DirViewer::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Enter ||
         event->key() == Qt::Key_Return)
@@ -42,7 +46,17 @@ void FileViewer::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void FileViewer::changeDir(QDir dir)
+bool DirViewer::event(QEvent *event)
+{
+    if (event->type() == OpenDiskList) {
+        openDiskList();
+        event->accept();
+        return true;
+    }
+    return false;
+}
+
+void DirViewer::changeDir(QDir dir)
 {
     QString path = dir.absolutePath();
     model->setRootPath(path);
@@ -52,7 +66,7 @@ void FileViewer::changeDir(QDir dir)
     emit dirChanged(dir);
 }
 
-void FileViewer::on_listView_doubleClicked(const QModelIndex &index)
+void DirViewer::on_listView_doubleClicked(const QModelIndex &index)
 {
     QString path = model->filePath(index);
     QFileInfo fi(path);
@@ -61,4 +75,12 @@ void FileViewer::on_listView_doubleClicked(const QModelIndex &index)
     } else {
         emit fileAction(fi);
     }
+}
+
+void DirViewer::openDiskList()
+{
+    QSize size = selector->size();
+    selector->setGeometry(0,0,size.width(), size.height());
+    selector->setVisible(true);
+    selector->setFocus();
 }

@@ -17,6 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    virtual void keyPressEvent(QKeyEvent *);
+
 private:
     void setLeft(AbstractPanel * panel);
     void setRight(AbstractPanel * panel);

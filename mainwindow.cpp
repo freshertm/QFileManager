@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
-#include "fileviewer.h"
+#include "dirviewer.h"
+#include "diskselector.h"
+#include <QKeyEvent>
+#include "customevent.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -11,8 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QDir dir("C:/");
 
-    FileViewer *l = new FileViewer(dir, this);
-    FileViewer *r = new FileViewer(dir, this);
+    DirViewer *l = new DirViewer(dir, this);
+    DirViewer *r = new DirViewer(dir, this);
     setLeft(l);
     setRight(r);
 }
@@ -20,6 +22,19 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::keyPressEvent(QKeyEvent * event)
+{
+    if (event->key() == Qt::Key_F1 &&
+        event->modifiers() == Qt::AltModifier){
+        QCoreApplication::postEvent(left, new QEvent(OpenDiskList));
+    }
+
+    if (event->key() == Qt::Key_F2 &&
+        event->modifiers() == Qt::AltModifier){
+        QCoreApplication::postEvent(right, new QEvent(OpenDiskList));
+    }
 }
 
 void MainWindow::setLeft(AbstractPanel *panel)
