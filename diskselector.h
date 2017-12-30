@@ -28,7 +28,7 @@ protected:
 
 private slots:
     void on_listView_clicked(const QModelIndex &index);
-    void onCustomContextMenu(const QPoint &point);
+
 
 private:
     Ui::DiskSelector *ui;

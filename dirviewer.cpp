@@ -3,6 +3,62 @@
 #include <QKeyEvent>
 #include "customevent.h"
 
+
+#include <windows.h>
+#include <string>
+#include "Shtypes.h"
+#include "Shlobj.h"
+
+
+bool openShellContextMenuForObject(const std::wstring &path, int xPos, int yPos, void * parentWindow)
+{
+    Q_ASSERT(parentWindow);
+    ITEMIDLIST * id = 0;
+    std::wstring windowsPath = path;
+    std::replace(windowsPath.begin(), windowsPath.end(), '/', '\\');
+    HRESULT result = SHParseDisplayName(windowsPath.c_str(), 0, &id, 0, 0);
+    if (!SUCCEEDED(result) || !id)
+        return false;
+    //CItemIdListReleaser idReleaser (id);
+
+    IShellFolder * ifolder = 0;
+
+    LPCITEMIDLIST idChild = 0;
+    result = SHBindToParent(id, IID_IShellFolder, (void**)&ifolder, &idChild);
+    if (!SUCCEEDED(result) || !ifolder)
+        return false;
+    //CComInterfaceReleaser ifolderReleaser (ifolder);
+
+    IContextMenu * imenu = 0;
+    result = ifolder->GetUIObjectOf((HWND)parentWindow, 1, &idChild, IID_IContextMenu, 0, (void**)&imenu);
+    if (!SUCCEEDED(result) || !ifolder)
+        return false;
+    //CComInterfaceReleaser menuReleaser(imenu);
+
+    HMENU hMenu = CreatePopupMenu();
+    if (!hMenu)
+        return false;
+    if (SUCCEEDED(imenu->QueryContextMenu(hMenu, 0, 1, 0x7FFF, CMF_NORMAL)))
+    {
+        int iCmd = TrackPopupMenuEx(hMenu, TPM_RETURNCMD, xPos, yPos, (HWND)parentWindow, NULL);
+        if (iCmd > 0)
+        {
+            CMINVOKECOMMANDINFOEX info = { 0 };
+            info.cbSize = sizeof(info);
+            info.fMask = CMIC_MASK_UNICODE;
+            info.hwnd = (HWND)parentWindow;
+            info.lpVerb = MAKEINTRESOURCEA(iCmd - 1);
+            info.lpVerbW = MAKEINTRESOURCEW(iCmd - 1);
+            info.nShow = SW_SHOWNORMAL;
+            imenu->InvokeCommand((LPCMINVOKECOMMANDINFO)&info);
+        }
+    }
+    DestroyMenu(hMenu);
+    return true;
+}
+
+
+
 DirViewer::DirViewer(QDir dir, QWidget *parent) :
     AbstractPanel(dir, parent),
     ui(new Ui::DirViewer),
@@ -23,6 +79,8 @@ DirViewer::DirViewer(QDir dir, QWidget *parent) :
 
     connect(selector, &DiskSelector::driveSelected, this, &DirViewer::changeDir);
     connect(model, &QFileSystemModel::directoryLoaded, this, &DirViewer::directoryLoaded);
+    connect(ui->listView, &QListView::customContextMenuRequested,
+            this, &DirViewer::onCustomContextMenu);
 }
 
 DirViewer::~DirViewer()
@@ -107,5 +165,14 @@ void DirViewer::openDiskList()
 void DirViewer::directoryLoaded(const QString &path)
 {
     ui->listView->setCurrentIndex(model->index(0));
+}
 
+void DirViewer::onCustomContextMenu(const QPoint &point)
+{
+    auto index = ui->listView->indexAt(point);
+    QPoint gpoint = this->mapToGlobal(point);
+    if (index.isValid()) {
+        QString path =model->fileInfo(index).absoluteFilePath();
+        openShellContextMenuForObject(path.toStdWString(), gpoint.x(), gpoint.y(), (HWND)winId());
+    }
 }

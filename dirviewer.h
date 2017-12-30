@@ -33,6 +33,8 @@ private slots:
     void openDiskList();
     void directoryLoaded(const QString &path);
 
+    void onCustomContextMenu(const QPoint &point);
+
 private:
     QDir dir;
     Ui::DirViewer *ui;
