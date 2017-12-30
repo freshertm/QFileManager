@@ -32,10 +32,11 @@ private slots:
     void on_listView_doubleClicked(const QModelIndex &index);
     void openDiskList();
     void directoryLoaded(const QString &path);
-
     void onCustomContextMenu(const QPoint &point);
+    void openCurrentItem();
 
 private:
+    bool openShellContextMenuForObject(const std::wstring &path, int xPos, int yPos, void * parentWindow);
     QDir dir;
     Ui::DirViewer *ui;
     QFileSystemModel * model;
