@@ -44,3 +44,6 @@ FORMS += \
     dirviewer.ui
 
 LIBS += User32.lib
+
+RESOURCES += \
+    resources.qrc
