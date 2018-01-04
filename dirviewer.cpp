@@ -9,11 +9,6 @@
 #include "Shtypes.h"
 #include "Shlobj.h"
 
-
-
-
-
-
 DirViewer::DirViewer(QDir dir, QWidget *parent) :
     AbstractPanel(dir, parent),
     ui(new Ui::DirViewer),
