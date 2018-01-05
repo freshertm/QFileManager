@@ -27,6 +27,7 @@ DiskSelector::~DiskSelector()
 
 void DiskSelector::showEvent(QShowEvent *event)
 {
+    Q_UNUSED(event);
     int w = 50 + ui->listView->sizeHintForColumn(0) ;
     int h = 10 + ui->listView->sizeHintForRow(0) * ui->listView->model()->rowCount();
 

@@ -116,6 +116,7 @@ void DirViewer::openDiskList()
 
 void DirViewer::directoryLoaded(const QString &path)
 {
+    Q_UNUSED(path);
     ui->listView->setCurrentIndex(model->index(0));
 }
 

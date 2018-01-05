@@ -9,7 +9,7 @@ class AbstractPanel : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AbstractPanel(QDir rootDir, QWidget *parent = nullptr){}
+    explicit AbstractPanel(QDir rootDir, QWidget *parent = nullptr): QWidget(parent){}
     virtual ~AbstractPanel(){}
     virtual QDir currentDir()=0;
 
