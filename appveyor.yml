@@ -31,4 +31,4 @@ after_build:
   - cd deploy
   - windeployqt untitled.exe
   - cd ..
-  - 7zip a release-{build}.zip deploy\
+  - 7z.exe a release-{build}.zip deploy\
