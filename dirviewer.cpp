@@ -9,6 +9,8 @@
 #include "Shtypes.h"
 #include "Shlobj.h"
 
+#include <QDebug>
+
 DirViewer::DirViewer(QDir dir, QWidget *parent) :
     AbstractPanel(dir, parent),
     ui(new Ui::DirViewer),
@@ -116,8 +118,7 @@ void DirViewer::openDiskList()
 
 void DirViewer::directoryLoaded(const QString &path)
 {
-    Q_UNUSED(path);
-    ui->listView->setCurrentIndex(model->index(0));
+    ui->listView->setCurrentIndex(model->index(0,0,model->index(path)));
 }
 
 void DirViewer::openCurrentItem()
