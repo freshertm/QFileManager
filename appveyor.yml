@@ -14,16 +14,14 @@ environment:
 
 
 before_build:
-  - set PATH=C:\cygwin\bin;%QT5%\bin;%PATH%
-  - appveyor DownloadFile http://download.qt.io/official_releases/jom/jom.zip
-  - 7z x -y jom.zip jom.exe
-
-build:
-
-build_script:
   - ps: $env:VSCOMNTOOLS=(Get-Content ("env:VS" + "$env:VSVER" + "0COMNTOOLS")) 
   - if "%PLATFORM%" == "X86" call "%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat"
   - if "%PLATFORM%" == "X64" "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
   - if "%PLATFORM%" == "X64" call "%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat" x86_amd64
-  - qmake -spec %SPEC% -r CONFIG+=debug_and_release CONFIG+=no_webkit qt_testability.pro
+  - qmake -spec %SPEC% -r CONFIG+=debug_and_release untitled.pro
+
+build_script:
   - jom
+  
+after_build:
+  - echo "%DEPLOY_DIR%"
