@@ -15,7 +15,7 @@ environment:
 
 before_build:
   - set PATH=%QT5%\bin;C:\Qt\Tools\QtCreator\bin;%PATH%
-  - echo %PATH%
+  - DIR %QT5%\bin
   - ps: $env:VSCOMNTOOLS=(Get-Content ("env:VS" + "$env:VSVER" + "0COMNTOOLS")) 
   - if "%PLATFORM%" == "X86" call "%VSCOMNTOOLS%\..\..\VC\vcvarsall.bat"
   - if "%PLATFORM%" == "X64" "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
