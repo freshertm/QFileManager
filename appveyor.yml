@@ -26,4 +26,9 @@ build_script:
   - jom
   
 after_build:
-  - echo "%DEPLOY_DIR%"
+  - mkdir deploy
+  - copy release\untitled.exe deploy\
+  - cd deploy
+  - windeployqt untitled.exe
+  - cd ..
+  - 7zip a release-{build}.zip deploy\
